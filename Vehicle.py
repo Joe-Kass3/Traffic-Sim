@@ -4,7 +4,7 @@ Wed Jan 19 2022
 Joe Kass
 """
 
-class Traffic_Object:
+class Vehicle:
     """Base class for simulation of traffic"""
     def __init__(self, speed, direction, location):
         self.speed = speed
@@ -20,12 +20,12 @@ class Traffic_Object:
     def turn(self, direction, degrees):
         pass
 
-class Car(Traffic_Object):
+class Car(Vehicle):
     """Standard class for small motor vehicle"""
     def __init__(self, speed, direction, location):
         super().__init__(speed, direction, location)
 
-class Truck(Traffic_Object):
+class Truck(Vehicle):
     """Standard class for large motor vehicle"""
     def __init__(self, speed, direction, location, load_weight):
         super().__init__(speed, direction, location)
