@@ -103,13 +103,49 @@ class Truck(Vehicle):
         pass
     
     
+class ISimOutput(ABC):
+    """Base class for vehicle interface"""
+    def __init__(self, vehicle):
+        if not isinstance(vehicle, Vehicle):
+            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
+        self.vehicle = vehicle
+    
+    @abstractmethod
+    def get_speed(self):
+        ...
+    
+class ImperialOutput(ISimOutput):
+    """Imperial Unit Conversion"""
+    def __init__(self, vehicle):
+        super().__init__(vehicle)
+        self.unit_name = 'mph'
+    
+    def get_speed(self):
+         return (self.vehicle.speed)
+        
+class MetricOutput(ISimOutput):
+    """Metric Unit Conversion"""
+
+    def __init__(self, vehicle):
+        super().__init__(vehicle)
+        self.unit_name = 'kph'
+        
+    def get_speed(self):
+        return (self.vehicle.speed * 1.6)
+    
+    
 if __name__ == "__main__":
     car = Car(0, 65, 0, 0)
     truck1 = Truck(0, 55, 0, 1, 4)
     truck2 = Truck(0, 50, 0, 2, 8)
     v_list = [car, truck1, truck2]
+    metric = []
+    
+    for i in range(len(v_list)):
+        metric.append(MetricOutput(v_list[i]))
+    
     for i in range(11):
         for j in range(len(v_list)):
             v_list[j].update_speed(1)
-            print('{0} speed: {1:8.2f} mph'.format(type(v_list[j]).__name__, v_list[j].speed))
+            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, metric[j].get_speed(), metric[j].unit_name))
         
