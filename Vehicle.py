@@ -105,10 +105,11 @@ class Truck(Vehicle):
     
 class ISimOutput(ABC):
     """Base class for vehicle interface"""
-    def __init__(self, vehicle):
-        if not isinstance(vehicle, Vehicle):
-            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
-        self.vehicle = vehicle
+    
+    @property
+    @abstractmethod
+    def _unit_name(self):
+        ...
     
     @abstractmethod
     def get_speed(self):
@@ -116,22 +117,27 @@ class ISimOutput(ABC):
     
 class ImperialOutput(ISimOutput):
     """Imperial Unit Conversion"""
-    def __init__(self, vehicle):
-        super().__init__(vehicle)
-        self.unit_name = 'mph'
     
-    def get_speed(self):
-         return (self.vehicle.speed)
+    @property
+    def _unit_name(self):
+        return 'mph'
+    
+    def get_speed(self, vehicle):
+        if not isinstance(vehicle, Vehicle):
+            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
+        return (vehicle.speed)
         
 class MetricOutput(ISimOutput):
     """Metric Unit Conversion"""
 
-    def __init__(self, vehicle):
-        super().__init__(vehicle)
-        self.unit_name = 'kph'
+    @property
+    def _unit_name(self):
+        return 'kph'
         
-    def get_speed(self):
-        return (self.vehicle.speed * 1.6)
+    def get_speed(self, vehicle):
+        if not isinstance(vehicle, Vehicle):
+            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
+        return (vehicle.speed * 1.6)
     
     
 if __name__ == "__main__":
@@ -139,13 +145,11 @@ if __name__ == "__main__":
     truck1 = Truck(0, 55, 0, 1, 4)
     truck2 = Truck(0, 50, 0, 2, 8)
     v_list = [car, truck1, truck2]
-    metric = []
-    
-    for i in range(len(v_list)):
-        metric.append(MetricOutput(v_list[i]))
+    #output = ImperialOutput()
+    output = MetricOutput()
     
     for i in range(11):
         for j in range(len(v_list)):
             v_list[j].update_speed(1)
-            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, metric[j].get_speed(), metric[j].unit_name))
+            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, output.get_speed(v_list[j]), output._unit_name))
         
