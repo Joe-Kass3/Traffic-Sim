@@ -14,6 +14,7 @@ DEC_RATE = 7.0              # Braking rate for cars in m/s
 DEC_RATE_EMPTY = 5.0        # Braking rate for light trucks in m/s
 DEC_RATE_FULL = 2.0         # Braking rate for light trucks in m/s
 MPS_TO_MPH = 2.237
+MPS_TO_KPH = 3.6
 
 class Vehicle(ABC):
     """Base class for simulation of traffic"""
@@ -139,17 +140,36 @@ class MetricOutput(ISimOutput):
             raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
         return (vehicle.speed * 1.6)
     
+class GUI:
+    """GUI Class for vehicles"""
+    def __init__(self):
+        self.unit = input("Enter 'M' for Metric or 'I' for Imperial: ")
+        
+        if (self.unit == "M"):
+            self.output = MetricOutput()
+        elif (self.unit == "I"):
+            self.output = ImperialOutput()
+        else:
+            raise ValueError("Choice of unit must be 'M' or 'I'")
+        
+        self.speed_limit = int(input("Enter speed limit: "))
+        
+        
+        
+
+        
     
 if __name__ == "__main__":
-    car = Car(0, 65, 0, 0)
-    truck1 = Truck(0, 55, 0, 1, 4)
-    truck2 = Truck(0, 50, 0, 2, 8)
+    gui = GUI()
+    car = Car(0, gui.speed_limit, 0, 0)
+    truck1 = Truck(0, gui.speed_limit, 0, 1, 4)
+    truck2 = Truck(0, gui.speed_limit, 0, 2, 8)
     v_list = [car, truck1, truck2]
     #output = ImperialOutput()
-    output = MetricOutput()
+    #output = MetricOutput()
     
     for i in range(11):
         for j in range(len(v_list)):
             v_list[j].update_speed(1)
-            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, output.get_speed(v_list[j]), output._unit_name))
+            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, gui.output.get_speed(v_list[j]), gui.output._unit_name))
         
