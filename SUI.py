@@ -26,10 +26,12 @@ class Console_Print:
             if (x >= 0 and x < Constants.CHAR_MAP_SIZE):
                 while (road_dist < CC_length):
                     y = CC_y - road_dist
-                    if (y>=0 and y < Constants.CHAR_MAP_SIZE):
+                    while (y>=0 and y < Constants.CHAR_MAP_SIZE):
+
                         cm.char_map[y][x] = '|'
                         cm.char_map[y][x + 2] = '|'
                         cm.char_map[y][x + 4] = '|'
+                        y += 1
                     road_dist += 1
             
         elif road.heading.name == 'South':
@@ -37,14 +39,13 @@ class Console_Print:
         elif road.heading.name == 'East':
             y = CC_y
             if (y >= 0 and y < Constants.CHAR_MAP_SIZE):
-                while (road_dist < CC_length):
+                while(road_dist < CC_length):
                     x = CC_x - road_dist
-                    if (x>=0 and x < Constants.CHAR_MAP_SIZE):
-
+                    while (x>=0 and x < Constants.CHAR_MAP_SIZE):
                         cm.char_map[y][x] = '-'
                         cm.char_map[y + 2][x] = '-'
                         cm.char_map[y + 4][x] = '-'
-                    
+                        x += 1
                     road_dist += 1  
                     
         elif road.heading.name == 'West':
