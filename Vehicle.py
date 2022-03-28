@@ -5,16 +5,17 @@ Joe Kass
 """
 
 from abc import ABC, abstractmethod
+from Common import Constants
 
 # Define Constants
-ACC_RATE = 3.5              # Acceleration rate for cars in m/s
-ACC_RATE_EMPTY = 2.5        # Acceleration rate for light trucks in m/s
-ACC_RATE_FULL = 1.0         # Acceleration rate for heavy trucks in m/s
-DEC_RATE = 7.0              # Braking rate for cars in m/s
-DEC_RATE_EMPTY = 5.0        # Braking rate for light trucks in m/s
-DEC_RATE_FULL = 2.0         # Braking rate for light trucks in m/s
-MPS_TO_MPH = 2.237
-MPS_TO_KPH = 3.6
+# ACC_RATE = 3.5              # Acceleration rate for cars in m/s
+# ACC_RATE_EMPTY = 2.5        # Acceleration rate for light trucks in m/s
+# ACC_RATE_FULL = 1.0         # Acceleration rate for heavy trucks in m/s
+# DEC_RATE = 7.0              # Braking rate for cars in m/s
+# DEC_RATE_EMPTY = 5.0        # Braking rate for light trucks in m/s
+# DEC_RATE_FULL = 2.0         # Braking rate for light trucks in m/s
+# MPS_TO_MPH = 2.237
+# MPS_TO_KPH = 3.6
 
 class Vehicle(ABC):
     """Base class for simulation of traffic"""
@@ -49,14 +50,14 @@ class Car(Vehicle):
         super().__init__(speed, desired_speed, direction, location)
     
     def accelerate(self, seconds):
-        temp_speed = self.speed + (ACC_RATE * seconds * MPS_TO_MPH)
+        temp_speed = self.speed + (Constants.ACC_RATE * seconds * Constants.MPS_TO_MPH)
         if (temp_speed > self.desired_speed):
             self.speed = self.desired_speed
         else:
             self.speed = temp_speed
 
     def decelerate(self, seconds):
-        temp_speed = self.speed - (DEC_RATE * seconds * MPS_TO_MPH)
+        temp_speed = self.speed - (Constants.DEC_RATE * seconds * Constants.MPS_TO_MPH)
         if (temp_speed < self.desired_speed):
             self.speed = self.desired_speed
         else:
@@ -73,15 +74,11 @@ class Truck(Vehicle):
         super().__init__(speed, desired_speed, direction, location)
         self.load_weight = load_weight
     
-# Disabled for timebeing, will remove entirely unless there is some need for control of setting load weight
-#    def set_load_weight(self, weight):
-#        self.load_weight = weight
-    
     def accelerate(self, seconds):
         if (self.load_weight <= 5):
-            temp_speed = self.speed + (ACC_RATE_EMPTY * seconds * MPS_TO_MPH)
+            temp_speed = self.speed + (Constants.ACC_RATE_EMPTY * seconds * Constants.MPS_TO_MPH)
         else:
-            temp_speed = self.speed + (ACC_RATE_FULL * seconds * MPS_TO_MPH)
+            temp_speed = self.speed + (Constants.ACC_RATE_FULL * seconds * Constants.MPS_TO_MPH)
             
         if (temp_speed > self.desired_speed):
             self.speed = self.desired_speed
@@ -91,9 +88,9 @@ class Truck(Vehicle):
                 
     def decelerate(self, seconds):
         if (self.load_weight <= 5):
-            temp_speed = self.speed - (DEC_RATE_EMPTY * seconds * MPS_TO_MPH)
+            temp_speed = self.speed - (Constants.DEC_RATE_EMPTY * seconds * Constants.MPS_TO_MPH)
         else:
-            temp_speed = self.speed - (DEC_RATE_FULL * seconds * MPS_TO_MPH)
+            temp_speed = self.speed - (Constants.DEC_RATE_FULL * seconds * Constants.MPS_TO_MPH)
             
         if (temp_speed < self.desired_speed):
             self.speed = self.desired_speed
@@ -154,22 +151,4 @@ class GUI:
         
         self.speed_limit = int(input("Enter speed limit: "))
         
-        
-        
-
-        
-    
-if __name__ == "__main__":
-    gui = GUI()
-    car = Car(0, gui.speed_limit, 0, 0)
-    truck1 = Truck(0, gui.speed_limit, 0, 1, 4)
-    truck2 = Truck(0, gui.speed_limit, 0, 2, 8)
-    v_list = [car, truck1, truck2]
-    #output = ImperialOutput()
-    #output = MetricOutput()
-    
-    for i in range(11):
-        for j in range(len(v_list)):
-            v_list[j].update_speed(1)
-            print('{0} speed: {1:8.2f} {2}'.format(type(v_list[j]).__name__, gui.output.get_speed(v_list[j]), gui.output._unit_name))
         
