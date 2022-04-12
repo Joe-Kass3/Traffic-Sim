@@ -8,10 +8,10 @@ Joe Kass
 from enum import Enum
 
 class Heading(Enum):
-    North = "North"
-    South = "South"
-    East = "East"
-    West = "West"
+    North = 0
+    South = 1
+    East = 2
+    West = 3
 
 class Road:
     """Create Road to place objects in Traffic Sim"""
@@ -37,7 +37,6 @@ class Road:
         Init Road objec
 
         """
-        pass
         if not isinstance(heading, Heading):
             raise TypeError('heading must be an instance of Heading Enum (North, South, East, West)')
             
@@ -49,6 +48,4 @@ class Road:
         self.length = road_len
         self.heading = heading
         
-        
-    # def print_road(self): #not pythonic
-    #     pass  
+          

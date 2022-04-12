@@ -7,16 +7,6 @@ Joe Kass
 from abc import ABC, abstractmethod
 from Common import Constants
 
-# Define Constants
-# ACC_RATE = 3.5              # Acceleration rate for cars in m/s
-# ACC_RATE_EMPTY = 2.5        # Acceleration rate for light trucks in m/s
-# ACC_RATE_FULL = 1.0         # Acceleration rate for heavy trucks in m/s
-# DEC_RATE = 7.0              # Braking rate for cars in m/s
-# DEC_RATE_EMPTY = 5.0        # Braking rate for light trucks in m/s
-# DEC_RATE_FULL = 2.0         # Braking rate for light trucks in m/s
-# MPS_TO_MPH = 2.237
-# MPS_TO_KPH = 3.6
-
 class Vehicle(ABC):
     """Base class for simulation of traffic"""
     def __init__(self, speed, desired_speed, direction, location):

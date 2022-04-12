@@ -16,7 +16,7 @@ class Console_Print:
     def print_road(cm, road):
         """display road in current char matrix"""
         CC_x = Conversions.WC_point_to_CC_point(road.loc_x)
-        CC_y = Conversions.WC_point_to_CC_point(road.loc_y)
+        CC_y = Conversions.WC_point_to_CC_point(-road.loc_y)
         CC_length = Conversions.WC_length_to_CC_length(road.length)
         road_dist = 0
 
@@ -26,26 +26,24 @@ class Console_Print:
             if (x >= 0 and x < Constants.CHAR_MAP_SIZE):
                 while (road_dist < CC_length):
                     y = CC_y - road_dist
-                    while (y>=0 and y < Constants.CHAR_MAP_SIZE):
-
+                    if (y>=0 and y < Constants.CHAR_MAP_SIZE):
                         cm.char_map[y][x] = '|'
                         cm.char_map[y][x + 2] = '|'
                         cm.char_map[y][x + 4] = '|'
-                        y += 1
                     road_dist += 1
             
         elif road.heading.name == 'South':
             pass
+        
         elif road.heading.name == 'East':
             y = CC_y
             if (y >= 0 and y < Constants.CHAR_MAP_SIZE):
                 while(road_dist < CC_length):
-                    x = CC_x - road_dist
-                    while (x>=0 and x < Constants.CHAR_MAP_SIZE):
+                    x = int(CC_x + road_dist)
+                    if (x>=0 and x < Constants.CHAR_MAP_SIZE):
                         cm.char_map[y][x] = '-'
                         cm.char_map[y + 2][x] = '-'
                         cm.char_map[y + 4][x] = '-'
-                        x += 1
                     road_dist += 1  
                     
         elif road.heading.name == 'West':

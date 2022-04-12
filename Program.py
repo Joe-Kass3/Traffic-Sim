@@ -50,7 +50,6 @@ class MetricOutput(ISimOutput):
         return (vehicle.speed * 1.6)
     
     def create_road(self, road_name, loc_x, loc_y, road_len, heading):
-
         return Road(road_name, loc_x / Constants.METERS_TO_KM, loc_y / Constants.METERS_TO_KM, road_len / Constants.METERS_TO_KM, heading)
 
 class GUI:
@@ -65,21 +64,22 @@ class GUI:
         else:
             raise ValueError("Choice of unit must be 'M' or 'I'")
         
-        self.speed_limit = int(input("Enter speed limit: ")) #this will be changed
+        #self.speed_limit = int(input("Enter speed limit: ")) #this will be changed, speed limit belongs attributed to road
 
 
 if __name__ == "__main__":
-    gui = GUI()
+    # gui = GUI()
     mp = Map()
-    uptown = gui.output.create_road("Uptown", 0.0, -0.09, .180, Heading.North)
-    mp.add_road(uptown)
-    crosstown = gui.output.create_road("Crosstown", -0.09, 0.0, .180, Heading.East);
-    mp.add_road(crosstown)
-    #print(mp._list_roads)
+    mp.load_map('test_map')
     
+    # uptown = gui.output.create_road("Uptown", 0.0, -0.09, .180, Heading.North)
+    # mp.add_road(uptown)
+    # crosstown = gui.output.create_road("Crosstown", -0.09, 0.0, .180, Heading.East);
+    # mp.add_road(crosstown)
+
     mp.print_map()
     mp.display_map()
-    
+    #mp.save_map('hw9_map')
     
     # car = Car(0, gui.speed_limit, 0, 0)
     # truck1 = Truck(0, gui.speed_limit, 0, 1, 4)
