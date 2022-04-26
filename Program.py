@@ -8,6 +8,7 @@ from Vehicle import Vehicle, Car, Truck
 from Road import Road, Heading
 from Map import Map
 from Common import Constants
+from Static_Road_Item import Stop_Sign, Speed_Limit_Sign
 
 class ISimOutput(ABC):
     """Base class for vehicle interface"""
@@ -30,12 +31,17 @@ class ImperialOutput(ISimOutput):
     
     def get_speed(self, vehicle):
         if not isinstance(vehicle, Vehicle):
-            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
+            raise TypeError("{} is not a Vehicle object".format(type(vehicle)))
         return (vehicle.speed)
     
     def create_road(self, road_name, loc_x, loc_y, road_len, heading):
         return Road(road_name, loc_x / Constants.METERS_TO_MILES, loc_y / Constants.METERS_TO_MILES, road_len / Constants.METERS_TO_MILES, heading)
 
+    def create_speed_limit(self, speed, distance):
+        return Speed_Limit_Sign(speed, distance / Constants.METERS_TO_MILES)
+    
+    def create_stop_sign(self, distance):
+        return Stop_Sign(distance / Constants.METERS_TO_MILES)
         
 class MetricOutput(ISimOutput):
     """Metric Unit Conversion"""
@@ -46,11 +52,18 @@ class MetricOutput(ISimOutput):
         
     def get_speed(self, vehicle):
         if not isinstance(vehicle, Vehicle):
-            raise TypeError("{} is not a Vehicle class".format(type(vehicle)))
+            raise TypeError("{} is not a Vehicle object".format(type(vehicle)))
         return (vehicle.speed * 1.6)
     
     def create_road(self, road_name, loc_x, loc_y, road_len, heading):
         return Road(road_name, loc_x / Constants.METERS_TO_KM, loc_y / Constants.METERS_TO_KM, road_len / Constants.METERS_TO_KM, heading)
+
+    def create_speed_limit(self, speed, distance):
+        return Speed_Limit_Sign(speed, distance / Constants.METERS_TO_KM)
+    
+    def create_stop_sign(self, distance):
+        return Stop_Sign(distance / Constants.METERS_TO_KM)
+
 
 class GUI:
     """GUI Class for the program"""
@@ -76,10 +89,23 @@ if __name__ == "__main__":
     # mp.add_road(uptown)
     # crosstown = gui.output.create_road("Crosstown", -0.09, 0.0, .180, Heading.East);
     # mp.add_road(crosstown)
+    # sign1 = gui.output.create_stop_sign(0.01)
+    # sign2 = gui.output.create_stop_sign(0.23)
+    # sign3 = gui.output.create_stop_sign(0.32)
+    # sign4 = gui.output.create_stop_sign(0.302)
+    # limit1 = gui.output.create_speed_limit(80.0, 0.02)
+    # limit2 = gui.output.create_speed_limit(50.0, 0.123)
+    
+    # uptown.add_item(sign2)
+    # uptown.add_item(sign3)
+    # uptown.add_item(sign4)
+    # uptown.add_item(limit2)
+    # crosstown.add_item(sign1)
+    # crosstown.add_item(limit1)
 
     mp.print_map()
     mp.display_map()
-    #mp.save_map('hw9_map')
+    # mp.save_map('items_map')
     
     # car = Car(0, gui.speed_limit, 0, 0)
     # truck1 = Truck(0, gui.speed_limit, 0, 1, 4)

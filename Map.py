@@ -8,6 +8,7 @@ from Road import Road, Heading
 from SUI import Console_Print, Char_Matrix
 import json
 from pathlib import Path
+from Static_Road_Item import *
 #from GUI import *
 
 class Map:
@@ -36,7 +37,19 @@ class Map:
         data = json.load(open(map_file, 'r'))
         for road in data['Roads']:
             new_road = Road(road['Name'], road['XLocation'], road['YLocation'], road['Length'], Heading(road['Heading']))
+            try:
+                for item in road['RoadItems']:
+                    if (item['Type'] == 'StopSign'):
+                        road_item = Stop_Sign(item['MileMarker'])
+                    if (item['Type'] == 'SpeedLimit'):
+                        road_item = Speed_Limit_Sign(item['SpeedLimit'], item['MileMarker'])
+                    
+                    new_road.add_item(road_item)
+            except KeyError:
+                ...
+            
             self._list_roads.append(new_road)
+            print('here')
 
     def save_map(self, map_name):
         """ Save map as json representation. file placed in ./maps/ folder"""
@@ -47,7 +60,14 @@ class Map:
         map_file = str(wd) + '\\maps\\' + map_name + '.json'
         
         for road in self._list_roads:
-            roads.append({"Name":road.name,"Length":road.length,"XLocation":road.loc_x,"YLocation":road.loc_y,"Heading":road.heading.value})
+            road_items = []
+            for item in road._items:
+                if isinstance(item, Stop_Sign):
+                    road_items.append({"Type":"StopSign","MileMarker":item.mile_marker})
+                if isinstance(item, Speed_Limit_Sign):
+                    road_items.append({"Type":"SpeedLimit","MileMarker":item.mile_marker,"SpeedLimit":item.posted_speed})
+            roads.append({"Name":road.name,"Length":road.length,"XLocation":road.loc_x,"YLocation":road.loc_y,"Heading":road.heading.value,
+                          "RoadItems":road_items})
         
         data['Roads'] = roads
 
