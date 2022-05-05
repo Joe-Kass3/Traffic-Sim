@@ -9,6 +9,8 @@ from Road import Road, Heading
 from Map import Map
 from Common import Constants
 from Static_Road_Item import Stop_Sign, Speed_Limit_Sign
+from Dynamic_Road_Item import Traffic_Light, Color
+from Simulator import Simulation
 
 class ISimOutput(ABC):
     """Base class for vehicle interface"""
@@ -82,8 +84,21 @@ class GUI:
 
 if __name__ == "__main__":
     # gui = GUI()
-    mp = Map()
-    mp.load_map('test_map')
+    # mp = Map()
+    # mp.load_map('test_map')
+    
+    sim = Simulation()
+    
+    light1 = Traffic_Light(7,2,5,Color.green,0.0)
+    light2 = Traffic_Light(7,2,5,Color.red,0.0)
+    
+    sim.add_dynamic_object(light1)
+    sim.add_dynamic_object(light2)
+    
+    for i in range(20):
+        sim.update(1)
+        print("Light 1: " + str(light1.current_color))
+        print("Light 2: " + str(light2.current_color))
     
     # uptown = gui.output.create_road("Uptown", 0.0, -0.09, .180, Heading.North)
     # mp.add_road(uptown)
@@ -103,8 +118,8 @@ if __name__ == "__main__":
     # crosstown.add_item(sign1)
     # crosstown.add_item(limit1)
 
-    mp.print_map()
-    mp.display_map()
+    # mp.print_map()
+    # mp.display_map()
     # mp.save_map('items_map')
     
     # car = Car(0, gui.speed_limit, 0, 0)
